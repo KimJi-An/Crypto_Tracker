@@ -15,9 +15,7 @@ const Header = styled.header`
   align-items: center;
 `;
 
-const CoinsList = styled.ul`
-
-`;
+const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background-color: white;
