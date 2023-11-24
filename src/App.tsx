@@ -1,6 +1,11 @@
-import { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import Router from "./Router";
+
+import { ThemeProvider } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
+import { useState } from "react";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { lightTheme, darkTheme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Smooch+Sans:wght@200;400&display=swap');
@@ -57,8 +62,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 600;
     font-family: 'Smooch Sans', sans-serif;
-    background-color:${(props) => props.theme.bgColor};
-    color:${(props) => props.theme.textColor};
+    background-color:${props => props.theme.bgColor};
+    color:${props => props.theme.textColor};
     line-height: 1.2;
   }
   a {
@@ -67,12 +72,80 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const ToggleBtn = styled.div`
+	position: absolute;
+  right: 20px;
+  top: 45px;
+  cursor: pointer;
+
+  .toggle-container {
+    position: relative;
+    width: 60px;
+    height: 33px;
+    border-radius: 30px;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .container-dark {
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: 0.5s;
+  }
+
+  .toggle-circle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background-color: rgb(255,254,255);
+    transition : 0.5s
+  }
+
+  .circle-dark {
+    left: 30px;
+    transition: 0.5s;
+  }
+`;
+
+const CheckTheme = styled.div`
+  text-align: center;
+  margin-top: 5px;
+  font-size: 15px;
+`;
+
+const currentTheme = window.localStorage.getItem("theme") === "Light" ? lightTheme : darkTheme;
+
 function App() {
+  const [themeMode, setThemeMode] = useState(currentTheme);
+  const [theme, setTheme] = useState("Light");
+
+  const toggleHandler = () => {
+    if (theme === "Light") {
+      setTheme("Dark");
+      window.localStorage.setItem("theme", "Dark");
+      setThemeMode(darkTheme);
+    } else {
+      setTheme("Light");
+      window.localStorage.setItem("theme", "Light");
+      setThemeMode(lightTheme);
+    }
+  };
+
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ToggleBtn onClick={toggleHandler}>
+        <div className={`toggle-container ${theme === "Dark" ? "container-dark" : null}`} />
+        <div className={`toggle-circle ${theme === "Dark" ? "circle-dark" : null}`} />
+        <CheckTheme>
+				  {theme === "Dark" ? "Light" : "Dark"}
+			  </CheckTheme>
+      </ToggleBtn>
+      <ThemeProvider theme={ themeMode }>
+        <GlobalStyle />
+        <Router />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </>
   );
 }

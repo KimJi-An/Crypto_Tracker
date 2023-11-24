@@ -1,3 +1,9 @@
+import Chart from "./Chart";
+import Price from "./Price";
+import styled from "styled-components";
+
+import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 import {
   Switch,
   Route,
@@ -5,13 +11,8 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import Price from "./Price";
-import Chart from "./Chart";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import { useQuery } from "react-query";
-import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0px 30px;
@@ -38,9 +39,10 @@ const Loader = styled.span`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${props => props.theme.textColor};
   padding: 10px 30px;
   border-radius: 10px;
+  color: ${props => props.theme.bgColor};
 `;
 
 const OverviewItem = styled.div`
@@ -73,11 +75,11 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 15px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${props => props.theme.textColor};
   padding: 10px 0px;
   border-radius: 10px;
   color: ${(props) =>
-    props.isActive ? props.theme.accentColor : props.theme.textColor};
+    props.isActive ? props.theme.accentColor : props.theme.bgColor};
   a {
     display: block;
   }

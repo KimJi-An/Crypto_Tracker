@@ -1,8 +1,9 @@
-import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { fetchCoins } from "../api";
+
 import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
+import { fetchCoins } from "../api";
+import { useQuery } from "react-query";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -18,7 +19,7 @@ const Header = styled.header`
 const CoinsList = styled.ul``;
 
 const Coin = styled.li`
-  background-color: white;
+  background-color: ${props => props.theme.textColor};
   color: ${props => props.theme.bgColor};
   border-radius: 15px;
   margin-bottom: 10px;
