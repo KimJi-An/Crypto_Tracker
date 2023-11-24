@@ -18,7 +18,13 @@ interface ChartProps {
 }
 
 function Chart({ coinId }: ChartProps) {
-  const {isLoading, data} = useQuery<IHisotical[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId));
+  const {isLoading, data} = useQuery<IHisotical[]>(
+    ["ohlcv", coinId],
+    () => fetchCoinHistory(coinId),
+    {
+      refetchInterval: 10000,
+    }
+  );
 
   return (
     <div>
@@ -30,7 +36,7 @@ function Chart({ coinId }: ChartProps) {
           series={[
             {
               name: "price",
-              data: data?.map((price => price.close)) ?? [],
+              data: data?.map((price) => price.close) ?? [],
             }
           ]}
           options={{
@@ -65,7 +71,22 @@ function Chart({ coinId }: ChartProps) {
               axisBorder: {
                 show: false,
               },
+              categories: data?.map((price) => new Date(Number(price.time_close) * 1000).toUTCString()),
+              type: "datetime",
             },
+            fill: {
+              type: "gradient",
+              gradient: {
+                gradientToColors: ["#e67e22"],
+                stops: [0, 100],
+              },
+            },
+            colors: ["#16a085"],
+            tooltip: {
+              y: {
+                formatter: (value) => `$ ${value.toFixed(2)}`,
+              }
+            }
           }}
         />
       )}
